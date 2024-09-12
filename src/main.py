@@ -14,7 +14,9 @@ if __name__ == "__main__":
 
     fila.queue_add_job(modelN)
     fila.queue_add_job(modelS)
-    fila.queue_add_job(modelN)
+    fila.queue_add_job(modelM)
     fila.queue_add_job(modelL)
 
     fila.queue_start()
+
+    #modelN.train(gtx_1080)
