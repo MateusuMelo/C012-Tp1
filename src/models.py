@@ -10,13 +10,13 @@ class Model:
 
     def train(self, device):
         total_time = self.complexity
-        interval = 0.1  # Intervalo de atualização do progresso em segundos
+        interval = 1  # Intervalo de atualização do progresso em segundos
         steps = int(total_time / interval)
 
         print(f"\nStarting training for model: {self.name} on {device.name} (complexity: {self.complexity})")
 
         for i in range(steps + 1):
-            time.sleep(interval)
+            time.sleep(0.2)
             self.progress = (i / steps) * 100
             self.update_log(device)
 
@@ -24,5 +24,5 @@ class Model:
 
     def update_log(self, device):
         bar = progress_bar(self.progress, 100)
-        sys.stdout.write(f"\r{self.name} on {device.modelName}: {bar}")
+        sys.stdout.write(f"\r{self.name} on {device.name}: {bar}")
         sys.stdout.flush()

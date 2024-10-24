@@ -13,8 +13,9 @@ if __name__ == "__main__":
     fila = Queue(gtx_1080)
 
     fila.queue_add_job(modelN)
-    fila.queue_add_job(modelS)
-    fila.queue_add_job(modelN)
     fila.queue_add_job(modelL)
+    fila.queue_add_job(modelM)
+    fila.queue_add_job(modelS)
 
     fila.queue_start()
+    fila.queue_start(scheduling="SJF")

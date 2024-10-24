@@ -1,6 +1,6 @@
 from device import Device
 from models import Model
-from multiprocessing.pool import ThreadPool
+import time
 
 class Queue:
     def __init__(self, device: Device):
@@ -11,24 +11,20 @@ class Queue:
         print("Add queue.")
         self.queue.append(model)
 
-    def queue_start(self):
+    def queue_start(self, scheduling="FCFS"):
         if not self.queue:
             print("Queue is empty")
             return
 
-        total_complexity = sum(model.complexity for model in self.queue)
-        if total_complexity == 0:
-            print("Total complexity is zero, cannot determine the number of threads.")
-            return
-
-        n_threads = max(1, int(self.worker.total_resources / total_complexity))  # Garantir pelo menos 1 thread
-
-        pool = ThreadPool(processes=n_threads)
+        if scheduling == "SJF":
+            self.queue.sort(key=lambda model: model.complexity)
+        elif scheduling == "FCFS":
+            pass
+        else:
+            print("Scheduling not supported")
+            return None
 
         for model in self.queue:
-            pool.apply_async(self.worker.execute, (model,))  # Corrigido para passar a função e os argumentos
-
-        pool.close()
-        pool.join()
+            self.worker.execute(model)
 
         return None
