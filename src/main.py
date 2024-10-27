@@ -7,7 +7,7 @@ if __name__ == "__main__":
     modelN = Model("modelN", 10)
     modelS = Model("modelS", 20)
     modelM = Model("modelM", 40)
-    modelL= Model("modelL", 80)
+    modelL = Model("modelL", 80)
 
 
     fila = Queue(gtx_1080)
@@ -18,4 +18,5 @@ if __name__ == "__main__":
     fila.queue_add_job(modelS)
 
     fila.queue_start()
+
     fila.queue_start(scheduling="SJF")

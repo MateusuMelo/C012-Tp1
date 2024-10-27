@@ -7,6 +7,7 @@ class Model:
         self.name = name
         self.complexity = complexity
         self.progress = 0
+        self.arrival_time = 0
 
     def train(self, device):
         total_time = self.complexity
