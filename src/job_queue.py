@@ -18,6 +18,7 @@ class Queue:
 
     def queue_add_job(self, model: Model):
         print(f"Adding {model.name} to queue.")
+        model.arrival_time = time.time()  # Define o tempo de chegada do modelo
         self.queue.append(model)
 
     def queue_start(self):
@@ -27,7 +28,7 @@ class Queue:
 
         print(f"Starting queue with {self.sync_mechanism} synchronization...")
         start_time = time.time()  # Início do processamento total
-        # Enquanto houver modelos na fila
+
         while self.queue:
             ready = []
 
@@ -39,7 +40,7 @@ class Queue:
 
             if not ready:
                 print("No available resources for any model, waiting...")
-                break  # Isso previne loops infinitos se não houver capacidade suficiente
+                break  # Previne loops infinitos se não houver capacidade suficiente
 
             # Remover modelos prontos da fila original
             for model in ready:
@@ -72,24 +73,31 @@ class Queue:
             for model in ready:
                 self.worker.desaloc_resources(model)
 
-            end_time = time.time()
-            total_time = end_time - start_time
-            average_wait_time = sum(self.wait_times) / len(self.wait_times)
-            print(f"\nTotal processing time: {total_time:.2f}s")
-            print(f"Average wait time: {average_wait_time:.2f}s\n")
-            ready = []
+        # Cálculo de tempos finais após o processamento da fila
+        end_time = time.time()
+        total_time = end_time - start_time
+        average_wait_time = sum(self.wait_times) / len(self.wait_times) if self.wait_times else 0
+        print(f"\nTotal processing time: {total_time:.2f}s")
+        print(f"Average wait time: {average_wait_time:.2f}s\n")
 
         print("Queue finished processing.")
 
     # Métodos para cada mecanismo de sincronização
     def train_with_binary_semaphore(self, model, model_num):
         with binary_semaphore:
+            print(f"Training {model.name} using binary semaphore.")
             model.train(self.worker, model_num)
+            print(f"Finished training {model.name} with binary semaphore.")
 
     def train_with_monitor(self, model, model_num):
         with monitor_lock:
+            print(f"Training {model.name} using monitor.")
             model.train(self.worker, model_num)
+            print(f"Finished training {model.name} with monitor.")
 
     def train_with_counting_semaphore(self, model, model_num):
         with counting_semaphore:
+            print(f"Training {model.name} using counting semaphore.")
             model.train(self.worker, model_num)
+            print(f"Finished training {model.name} with counting semaphore.")
+
